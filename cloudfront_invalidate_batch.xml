@@ -1,0 +1,6 @@
+<InvalidationBatch>
+  % for object in objects:
+  <Path>/${object | x}</Path>
+  % endfor
+  <CallerReference>${callerRef | x}</CallerReference>
+</InvalidationBatch>
