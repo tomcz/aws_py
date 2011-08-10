@@ -154,8 +154,8 @@ class S3Client:
             protocol = INSECURE_PROTOCOL
         return protocol + '://' +\
                params.hostname(self.use_vhost) +\
-               params.createPath(self.use_vhost)\
-               + "?" + urllib.urlencode(query)
+               params.createPath(self.use_vhost) +\
+               "?" + urllib.urlencode(query)
 
     def deleteObject(self, bucket_name, object_key):
         params = Parameters('DELETE', bucket_name, object_key)
