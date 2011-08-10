@@ -72,10 +72,10 @@ class Parameters:
         return result
 
     def isCanonicalHeader(self, name):
-        return name == CONTENT_TYPE_HEADER\
-               or name == CONTENT_MD5_HEADER\
-               or name == DATE_HEADER\
-        or name.startswith(AMAZON_HEADER_PREFIX)
+        return name == CONTENT_TYPE_HEADER or\
+               name == CONTENT_MD5_HEADER or\
+               name == DATE_HEADER or\
+               name.startswith(AMAZON_HEADER_PREFIX)
 
     def not_empty(self, value):
         return value and len(value) > 0
