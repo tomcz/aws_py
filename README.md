@@ -14,3 +14,5 @@ Requirements
 * All scripts look for a file called .s3dropbox in your home directory to provide the Amazon AWS keys.
   This is a file in java (yes, you read right) properties format, and follows the conventions set up by the
   [S3DropBox](https://github.com/tomcz/s3dropbox) project.
+
+These scripts are covered by the [MIT License](http://www.opensource.org/licenses/mit-license.php).
