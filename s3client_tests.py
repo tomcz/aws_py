@@ -155,7 +155,7 @@ class S3ClientTests(unittest.TestCase):
     def testShouldCreateExpectedPublicURL(self):
         client = S3Client(Credentials("0PN5J17HBGZHT7JJ3X82", "uV3F3YluFJax1cknvbcGwgjvx4QpvB+leU8dUj2o"))
         actual = client.publicURL('johnsmith', 'cute/puppy.jpg', datetime.datetime.fromtimestamp(1234))
-        expected = "https://s3.amazonaws.com/johnsmith/cute/puppy.jpg" +\
+        expected = "https://johnsmith.s3.amazonaws.com/cute/puppy.jpg" +\
                    "?AWSAccessKeyId=0PN5J17HBGZHT7JJ3X82" +\
                    "&Expires=1234" +\
                    "&Signature=HWHkXHVSQazVDcxkZaCkVlGz7vg%3D"

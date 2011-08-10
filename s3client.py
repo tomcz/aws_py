@@ -77,20 +77,30 @@ class Parameters:
                or name == DATE_HEADER\
         or name.startswith(AMAZON_HEADER_PREFIX)
 
-    def createPath(self):
+    def not_empty(self, value):
+        return value and len(value) > 0
+
+    def createPath(self, use_vhost=False):
         path = '/'
-        if self.bucket_name and len(self.bucket_name) > 0:
+        if not use_vhost and self.not_empty(self.bucket_name):
             path += self.bucket_name + "/"
-        if self.object_key and len(self.object_key) > 0:
+        if self.not_empty(self.object_key):
             path += urllib.quote_plus(self.object_key, '/')
-        if self.sub_resource:
+        if self.not_empty(self.sub_resource):
             path += '?' + self.sub_resource
         return path
 
+    def hostname(self, use_vhost=False):
+        if use_vhost and self.not_empty(self.bucket_name):
+            return self.bucket_name + '.' + DEFAULT_HOST
+        else:
+            return DEFAULT_HOST
+
 class S3Client:
-    def __init__(self, credentials, use_https=True):
+    def __init__(self, credentials, use_https=True, use_vhost=True):
         self.credentials = credentials
         self.use_https = use_https
+        self.use_vhost = use_vhost
 
     def listBuckets(self):
         params = Parameters('GET')
@@ -134,15 +144,16 @@ class S3Client:
         params = Parameters('GET', bucket_name, object_key, {}, None, expires)
         signature = self.credentials.sign(params.textToSign())
         query = [
-                ('AWSAccessKeyId', self.credentials.access_key_id),
-                ('Expires', str(expires)),
-                ('Signature', signature)
+            ('AWSAccessKeyId', self.credentials.access_key_id),
+            ('Expires', str(expires)),
+            ('Signature', signature)
         ]
         if self.use_https:
             protocol = SECURE_PROTOCOL
         else:
             protocol = INSECURE_PROTOCOL
-        return protocol + '://' + DEFAULT_HOST + params.createPath() + "?" + urllib.urlencode(query)
+        return protocol + '://' + params.hostname(self.use_vhost) + params.createPath(
+            self.use_vhost) + "?" + urllib.urlencode(query)
 
     def deleteObject(self, bucket_name, object_key):
         params = Parameters('DELETE', bucket_name, object_key)
@@ -151,11 +162,11 @@ class S3Client:
     def process(self, params, callback):
         params.setAuthHeader(self.credentials)
         if self.use_https:
-            conn = httplib.HTTPSConnection(DEFAULT_HOST)
+            conn = httplib.HTTPSConnection(params.hostname(self.use_vhost))
         else:
-            conn = httplib.HTTPConnection(DEFAULT_HOST)
+            conn = httplib.HTTPConnection(params.hostname(self.use_vhost))
         try:
-            conn.putrequest(params.method, params.createPath())
+            conn.putrequest(params.method, params.createPath(self.use_vhost))
             for name, value in params.headers.iteritems():
                 conn.putheader(name, value)
             conn.endheaders()
