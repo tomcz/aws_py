@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_option("-d", dest="distribution_id", help="Distribution ID", metavar="ID")
     parser.add_option("-i", dest="invalidation_id", help="Invalidation ID", metavar="ID")
 
-    (options, args) = parser.parse_args()
+    options, args = parser.parse_args()
 
     if options.distribution_id and options.invalidation_id:
         send_request(Parameters(options.distribution_id, options.invalidation_id))

@@ -13,7 +13,7 @@ if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options]")
     parser.add_option("-d", dest="distribution_id", help="Distribution ID", metavar="ID")
 
-    (options, args) = parser.parse_args()
+    options, args = parser.parse_args()
 
     if options.distribution_id:
         send_request(Parameters(options.distribution_id))

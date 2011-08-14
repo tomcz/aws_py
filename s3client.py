@@ -14,6 +14,8 @@ CONTENT_TYPE_HEADER = "content-type"
 ALTERNATIVE_DATE_HEADER = "x-amz-date"
 AMAZON_HEADER_PREFIX = "x-amz-"
 
+VIDEO_CONTENT_TYPES = {'.ogv': 'video/ogg', '.mp4': 'video/mp4', '.webm': 'video/webm'}
+
 class Parameters:
     def __init__(self, method, bucket_name=None, object_key=None, headers={}, sub_resource=None, expires=None):
         self.method = method
@@ -218,8 +220,13 @@ class S3Client:
             raise BadHttpResponse, message
 
     def getMimeType(self, file_path):
-        result = mimetypes.guess_type(os.path.basename(file_path))
-        return result[0] if result[0] else 'application/octet-stream'
+        basename = os.path.basename(file_path)
+        name, ext = os.path.splitext(basename)
+        if ext in VIDEO_CONTENT_TYPES:
+            return VIDEO_CONTENT_TYPES[ext]
+        else:
+            result = mimetypes.guess_type(basename)
+            return result[0] if result[0] else 'application/octet-stream'
 
     def computeMD5(self, file_path):
         md5 = hashlib.md5()
@@ -257,5 +264,5 @@ if __name__ == '__main__':
     client = S3Client(loadcredentials())
     for bucket_name in client.listBuckets():
         print "\nBucket:", bucket_name
-        for item in client.listObjects(bucket_name):
-            print "Object:", item
+        for object in client.listObjects(bucket_name):
+            print "Object:", object

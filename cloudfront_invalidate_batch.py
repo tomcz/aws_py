@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options] objectkey1 objectkey2 ...")
     parser.add_option("-d", dest="distribution_id", help="Distribution ID", metavar="ID")
 
-    (options, args) = parser.parse_args()
+    options, args = parser.parse_args()
 
     if options.distribution_id and len(args) > 0:
         callerRef = str(uuid.uuid4())

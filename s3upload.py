@@ -7,7 +7,7 @@ parser = OptionParser(usage="usage: %prog [options]")
 parser.add_option("-f", dest="file", help="File to upload", metavar="FILE")
 parser.add_option("-b", dest="bucket", help="Destination bucket", metavar="BUCKET")
 
-(options, args) = parser.parse_args()
+options, args = parser.parse_args()
 
 if options.file and options.bucket:
     client = S3Client(loadcredentials())
