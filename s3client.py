@@ -225,8 +225,8 @@ class S3Client:
         if ext in VIDEO_CONTENT_TYPES:
             return VIDEO_CONTENT_TYPES[ext]
         else:
-            result = mimetypes.guess_type(basename)
-            return result[0] if result[0] else 'application/octet-stream'
+            type, encoding = mimetypes.guess_type(basename, False)
+            return type if type else 'application/octet-stream'
 
     def computeMD5(self, file_path):
         md5 = hashlib.md5()
