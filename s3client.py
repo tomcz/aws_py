@@ -2,7 +2,7 @@ import urllib, httplib, time, hashlib, base64, os, mimetypes
 from BeautifulSoup import BeautifulStoneSoup
 from properties import loadcredentials
 
-CHUNK_SIZE = 4096
+CHUNK_SIZE = 1024 * 16
 
 DEFAULT_HOST = "s3.amazonaws.com"
 INSECURE_PROTOCOL = "http"
@@ -165,10 +165,7 @@ class S3Client:
 
     def process(self, params, callback):
         params.setAuthHeader(self.credentials)
-        if self.use_https:
-            conn = httplib.HTTPSConnection(params.hostname(self.use_vhost))
-        else:
-            conn = httplib.HTTPConnection(params.hostname(self.use_vhost))
+        conn = self.connect(params)
         try:
             conn.putrequest(params.method, params.createPath(self.use_vhost))
             for name, value in params.headers.iteritems():
@@ -177,6 +174,12 @@ class S3Client:
             return callback(conn)
         finally:
             conn.close()
+
+    def connect(self, params):
+        if self.use_https:
+            return httplib.HTTPSConnection(params.hostname(self.use_vhost))
+        else:
+            return httplib.HTTPConnection(params.hostname(self.use_vhost))
 
     def sendFile(self, conn, file_path):
         with open(file_path, 'rb') as src:
