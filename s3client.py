@@ -1,6 +1,7 @@
 import urllib, httplib, time, hashlib, base64, os, mimetypes
 from BeautifulSoup import BeautifulStoneSoup
 from properties import loadcredentials
+from contextlib import closing
 
 CHUNK_SIZE = 1024 * 16
 
@@ -165,15 +166,12 @@ class S3Client:
 
     def process(self, params, callback):
         params.setAuthHeader(self.credentials)
-        conn = self.connect(params)
-        try:
+        with closing(self.connect(params)) as conn:
             conn.putrequest(params.method, params.createPath(self.use_vhost))
             for name, value in params.headers.iteritems():
                 conn.putheader(name, value)
             conn.endheaders()
             return callback(conn)
-        finally:
-            conn.close()
 
     def connect(self, params):
         if self.use_https:
