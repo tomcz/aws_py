@@ -1,5 +1,6 @@
 from properties import loadcredentials
 import time, httplib, xml.dom.minidom
+from contextlib import closing
 
 DEFAULT_HOST = 'cloudfront.amazonaws.com'
 
@@ -34,8 +35,7 @@ def send_request(parameters, request_body=None):
     print '****************'
 
     parameters.setAuthHeader(loadcredentials())
-    conn = httplib.HTTPSConnection(DEFAULT_HOST)
-    try:
+    with closing(httplib.HTTPSConnection(DEFAULT_HOST)) as conn:
         conn.putrequest(parameters.method, parameters.createPath())
 
         for name, value in parameters.headers.iteritems():
@@ -51,6 +51,3 @@ def send_request(parameters, request_body=None):
 
         response_dom = xml.dom.minidom.parseString(response.read())
         print response_dom.toprettyxml()
-
-    finally:
-        conn.close()
