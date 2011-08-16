@@ -179,21 +179,15 @@ class S3Client:
             conn.close()
 
     def sendFile(self, conn, file_path):
-        src = open(file_path, 'rb')
-        try:
+        with open(file_path, 'rb') as src:
             self.copy(src.read, conn.send)
-        finally:
-            src.close()
         response = conn.getresponse()
         self.expect(response, httplib.OK)
 
     def receiveFile(self, response, file_path):
         self.expect(response, httplib.OK)
-        dest = open(file_path, 'wb')
-        try:
+        with open(file_path, 'wb') as dest:
             self.copy(response.read, dest.write)
-        finally:
-            dest.close()
 
     def parseBuckets(self, response):
         self.expect(response, httplib.OK)
@@ -230,11 +224,8 @@ class S3Client:
 
     def computeMD5(self, file_path):
         md5 = hashlib.md5()
-        src = open(file_path, 'rb')
-        try:
+        with open(file_path, 'rb') as src:
             self.copy(src.read, md5.update)
-        finally:
-            src.close()
         digest = md5.digest()
         return base64.b64encode(digest)
 
