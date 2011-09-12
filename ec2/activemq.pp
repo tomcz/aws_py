@@ -51,6 +51,7 @@ class activemq {
 
   service { "activemq":
     ensure => running,
+    enable => true,
     require => [Package["activemq-info-provider-5.5.0-2.el5.noarch"], File["/etc/activemq/activemq.xml"]]
   }
 }
@@ -107,6 +108,7 @@ class mcollective {
 
   service { "mcollective":
     ensure => running,
+    enable => true,
     require => [Package["mcollective-1.2.1-1.el5.noarch"], File["/etc/mcollective/server.cfg"], Service['activemq']]
   }
 }
