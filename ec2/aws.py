@@ -44,7 +44,7 @@ def run_instance(name):
     instance = res.instances[0]
 
     print "Waiting for", name, "to start ..."
-    time.sleep(30)
+    time.sleep(10)
     instance.update()
 
     while instance.state != 'running':
