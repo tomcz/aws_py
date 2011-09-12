@@ -71,6 +71,12 @@ def terminate_instance(name):
     config.remove_section(name)
     write_config(config)
 
+def terminate_all_instances():
+    conn = connect()
+    for reservation in conn.get_all_instances():
+        for instance in reservation.instances:
+            instance.terminate()
+
 def write_config(config):
     with open(INSTANCES_FILE, 'w') as fp:
         config.write(fp)
