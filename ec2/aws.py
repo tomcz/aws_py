@@ -10,7 +10,7 @@ EC2_REGION = 'us-west-1'
 EC2_SSH_KEY_NAME = 'us-west'
 EC2_SSH_KEY_PATH = os.path.join(os.getenv('HOME'), '.aws', 'us-west.pem')
 
-INSTANCES_FILE = os.path.join(os.getenv('HOME'), '.aws', 'aws_instances')
+INSTANCES_FILE = os.path.join(os.getenv('HOME'), '.aws', 'aws_instances.ini')
 S3_DROP_BOX_FILE = os.path.join(os.getenv('HOME'), '.s3dropbox')
 
 class Node:
