@@ -38,6 +38,7 @@ def mco_ping():
 def cleanup():
     config = aws.read_config()
     for section in config.sections():
+        print 'Shutting down', section, '...'
         aws.terminate_instance(section)
 
 @task
@@ -62,7 +63,7 @@ def wait_for_ssh_connection(node):
     with settings(warn_only=True):
         result = check_ssh(node)
         while result.failed:
-            print "Not ready ..."
+            print 'Waiting for SSH service ...'
             time.sleep(10)
             result = check_ssh(node)
 
@@ -71,6 +72,6 @@ def check_ssh(node):
 
 def setup_puppet_standalone():
     with settings(warn_only=True):
-        result = run("puppet --version")
+        result = run('puppet --version')
     if result.failed:
         sudo('yum install -y puppet')
