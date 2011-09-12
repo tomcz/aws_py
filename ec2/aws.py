@@ -76,6 +76,7 @@ def terminate_all_instances():
     for reservation in conn.get_all_instances():
         for instance in reservation.instances:
             instance.terminate()
+    os.remove(INSTANCES_FILE)
 
 def write_config(config):
     with open(INSTANCES_FILE, 'w') as fp:
