@@ -29,6 +29,12 @@ def provision_node(node_name):
         sudo('puppet apply /tmp/node.pp')
 
 @task
+def shell(node_name):
+    node = aws.provision_with_boto(node_name)
+    with connection_to_node(node):
+        open_shell()
+
+@task
 def mco_ping():
     node = aws.provision_with_boto('activemq')
     with connection_to_node(node):
