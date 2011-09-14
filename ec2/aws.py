@@ -62,6 +62,8 @@ def run_instance(name):
     return instance.public_dns_name
 
 def terminate_instance(name):
+    print 'Shutting down', name, '...'
+
     config = read_config()
     instance_id = config.get(name, 'instance_id')
 

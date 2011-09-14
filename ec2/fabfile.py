@@ -41,11 +41,14 @@ def mco_ping():
         run('mco ping')
 
 @task
-def cleanup():
+def cleanup(node_name = None):
     config = aws.read_config()
-    for section in config.sections():
-        print 'Shutting down', section, '...'
-        aws.terminate_instance(section)
+    if node_name:
+        if config.has_section(node_name):
+            aws.terminate_instance(node_name)
+    else:
+        for section in config.sections():
+            aws.terminate_instance(section)
 
 @task
 def destroy():
