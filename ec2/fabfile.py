@@ -29,16 +29,16 @@ def provision_node(node_name):
         sudo('puppet apply /tmp/node.pp')
 
 @task
-def shell(node_name):
-    node = aws.provision_with_boto(node_name)
-    with connection_to_node(node):
-        open_shell()
-
-@task
 def mco_ping():
     node = aws.provision_with_boto('activemq')
     with connection_to_node(node):
         run('mco ping')
+
+@task
+def shell(node_name):
+    node = aws.provision_with_boto(node_name)
+    with connection_to_node(node):
+        open_shell()
 
 @task
 def cleanup(node_name = None):
@@ -77,7 +77,7 @@ def wait_for_ssh_connection(node):
             result = check_ssh(node)
 
 def check_ssh(node):
-    return local('nc -zv %s 22' % node.hostname)
+    return local('nc -z -v -w 10 %s 22' % node.hostname)
 
 def setup_puppet_standalone():
     with settings(warn_only=True):
