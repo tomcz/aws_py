@@ -21,7 +21,7 @@ def provision_activemq():
 @task
 def provision_node(node_name):
     node = aws.provision_with_boto(node_name)
-    configure_server_cfg(aws.read_config().get('activemq', 'public_dns_name'))
+    configure_server_cfg(aws.public_dns('activemq'))
     with connection_to_node(node):
         setup_puppet_standalone()
         put('/tmp/server.cfg', '/tmp')

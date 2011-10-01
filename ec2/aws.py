@@ -90,3 +90,7 @@ def read_config():
         with open(INSTANCES_FILE) as fp:
             config.readfp(fp)
     return config
+
+def public_dns(name):
+    config = read_config()
+    return config.get(name, 'public_dns_name')
