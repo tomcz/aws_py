@@ -1,6 +1,6 @@
 import urllib, httplib, time, hashlib, base64, os, mimetypes
 from BeautifulSoup import BeautifulStoneSoup
-from properties import loadcredentials
+from ec2.properties import loadcredentials
 from contextlib import closing
 
 CHUNK_SIZE = 1024 * 16

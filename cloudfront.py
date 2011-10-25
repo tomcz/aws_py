@@ -1,4 +1,4 @@
-from properties import loadcredentials
+from ec2.properties import loadcredentials
 import time, httplib, xml.dom.minidom
 from contextlib import closing
 

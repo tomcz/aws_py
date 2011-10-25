@@ -1,17 +1,16 @@
 from boto.ec2 import connect_to_region
 from ConfigParser import SafeConfigParser
+from properties import loadcredentials
 import os, time
 
 USERNAME = 'ec2-user'
 AMI_ID = 'ami-8d1945c8'
 INSTANCE_TYPE = 'm1.small'
+INSTANCES_FILE = os.path.join(os.getenv('HOME'), '.aws', 'aws_instances.ini')
 
 EC2_REGION = 'us-west-1'
 EC2_SSH_KEY_NAME = 'us-west'
 EC2_SSH_KEY_PATH = os.path.join(os.getenv('HOME'), '.aws', 'us-west.pem')
-
-INSTANCES_FILE = os.path.join(os.getenv('HOME'), '.aws', 'aws_instances.ini')
-S3_DROP_BOX_FILE = os.path.join(os.getenv('HOME'), '.s3dropbox')
 
 class Node:
     def __init__(self, public_dns_name):
@@ -27,15 +26,9 @@ def provision_with_boto(name):
         return Node(run_instance(name))
 
 def connect():
-    properties = {}
-    with open(S3_DROP_BOX_FILE) as prop_file:
-        for line in prop_file:
-            text = line.strip()
-            if len(text) > 0 and not text.startswith('#'):
-                key, sep, val = text.partition('=')
-                properties[key.strip()] = val.strip()
-    access_key = properties['AMAZON_ACCESS_KEY_ID']
-    secret_key = properties['AMAZON_SECRET_ACCESS_KEY']
+    credentials = loadcredentials()
+    access_key = credentials.access_key_id
+    secret_key = credentials.secret_access_key
     return connect_to_region(EC2_REGION, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
 
 def run_instance(name):
@@ -78,7 +71,8 @@ def terminate_all_instances():
     for reservation in conn.get_all_instances():
         for instance in reservation.instances:
             instance.terminate()
-    os.remove(INSTANCES_FILE)
+    if os.path.isfile(INSTANCES_FILE):
+        os.remove(INSTANCES_FILE)
 
 def write_config(config):
     with open(INSTANCES_FILE, 'w') as fp:
