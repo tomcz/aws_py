@@ -3,8 +3,8 @@ from ConfigParser import SafeConfigParser
 import os, time
 
 USERNAME = 'ec2-user'
-AMI_ID = 'ami-c7c99982'
-INSTANCE_TYPE = 't1.micro'
+AMI_ID = 'ami-8d1945c8'
+INSTANCE_TYPE = 'm1.small'
 
 EC2_REGION = 'us-west-1'
 EC2_SSH_KEY_NAME = 'us-west'
