@@ -1,4 +1,4 @@
-from ec2.properties import loadcredentials
+from properties import loadcredentials
 from optparse import OptionParser
 from s3client import S3Client
 import os

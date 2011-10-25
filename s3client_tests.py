@@ -1,6 +1,6 @@
 from s3client import Parameters, S3Client, BadHttpResponse
 import unittest, os, tempfile, datetime, urllib, uuid
-from ec2.properties import Credentials, loadcredentials
+from properties import Credentials, loadcredentials
 
 class CredentialsTests(unittest.TestCase):
     def testCreatesExpectedSignature(self):
