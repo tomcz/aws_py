@@ -23,21 +23,21 @@ class activemq {
   package { "tanukiwrapper-3.5.9-1.el6.i686":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/tanukiwrapper-3.5.9-1.el6.i686.rpm",
+    source   => "http://watchitlater.com/rpms/tanukiwrapper-3.5.9-1.el6.i686.rpm",
     require  => [Package["java-1.6.0-openjdk-devel"], User["activemq"]]
   }
 
   package { "activemq-5.5.0-1.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/activemq-5.5.0-1.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/activemq-5.5.0-1.el6.noarch.rpm",
     require  => Package["tanukiwrapper-3.5.9-1.el6.i686"]
   }
 
   package { "activemq-info-provider-5.5.0-1.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/activemq-info-provider-5.5.0-1.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/activemq-info-provider-5.5.0-1.el6.noarch.rpm",
     require  => Package["activemq-5.5.0-1.el6"]
   }
 
@@ -77,21 +77,21 @@ class mcollective {
   package { "mcollective-common-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/mcollective-common-1.3.1-2.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/mcollective-common-1.3.1-2.el6.noarch.rpm",
     require  => Package["rubygem-stomp"]
   }
 
   package { "mcollective-client-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/mcollective-client-1.3.1-2.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/mcollective-client-1.3.1-2.el6.noarch.rpm",
     require  => Package["mcollective-common-1.3.1-2.el6"]
   }
 
   package { "mcollective-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/mcollective-1.3.1-2.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/mcollective-1.3.1-2.el6.noarch.rpm",
     require  => Package["mcollective-common-1.3.1-2.el6"]
   }
 

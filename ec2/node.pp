@@ -16,14 +16,14 @@ class mcollective {
   package { "mcollective-common-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/mcollective-common-1.3.1-2.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/mcollective-common-1.3.1-2.el6.noarch.rpm",
     require  => Package["rubygem-stomp"]
   }
 
   package { "mcollective-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://downloads.puppetlabs.com/mcollective/mcollective-1.3.1-2.el6.noarch.rpm",
+    source   => "http://watchitlater.com/rpms/mcollective-1.3.1-2.el6.noarch.rpm",
     require  => Package["mcollective-common-1.3.1-2.el6"]
   }
 
