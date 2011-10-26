@@ -51,10 +51,22 @@ class activemq {
     notify  => Service["activemq"]
   }
 
+  file { "/etc/activemq/broker.ks":
+    ensure  => present,
+    source  => "/tmp/broker.ks",
+    mode    => 0644,
+    group   => "activemq",
+    owner   => "activemq",
+    require => Package["activemq-info-provider-5.5.0-1.el6"],
+    notify  => Service["activemq"]
+  }
+
   service { "activemq":
     ensure  => running,
     enable  => true,
-    require => [Package["activemq-info-provider-5.5.0-1.el6"], File["/etc/activemq/activemq.xml"]]
+    require => [Package["activemq-info-provider-5.5.0-1.el6"],
+                File["/etc/activemq/activemq.xml"],
+                File["/etc/activemq/broker.ks"]]
   }
 }
 

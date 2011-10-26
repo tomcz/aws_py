@@ -14,6 +14,7 @@ def provision_activemq():
         setup_puppet_standalone()
         put('/tmp/server.cfg', '/tmp')
         put('client.cfg', '/tmp')
+        put('broker.ks', '/tmp')
         put('activemq.xml', '/tmp')
         put('activemq.pp', '/tmp')
         sudo('puppet apply /tmp/activemq.pp')

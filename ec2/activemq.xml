@@ -32,6 +32,9 @@
                 </map>
             </authorizationPlugin>
         </plugins>
+        <sslContext>
+            <sslContext keyStore="file:/etc/activemq/broker.ks" keyStorePassword="password0" />
+        </sslContext>
         <systemUsage>
             <systemUsage>
                 <memoryUsage>
@@ -46,8 +49,8 @@
             </systemUsage>
         </systemUsage>
         <transportConnectors>
-            <transportConnector name="openwire" uri="tcp://0.0.0.0:6166"/>
-            <transportConnector name="stomp" uri="stomp://0.0.0.0:6163"/>
+            <transportConnector name="openwire" uri="ssl://0.0.0.0:6166"/>
+            <transportConnector name="stompssl" uri="stomp+ssl://0.0.0.0:6163"/>
         </transportConnectors>
     </broker>
 </beans>
