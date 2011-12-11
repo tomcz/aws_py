@@ -31,7 +31,7 @@ def mco_ping():
 def shell(node_name):
     node = aws.provision_with_boto(node_name)
     wait_for_ssh_connection(node)
-    print "ssh -i %s %s@%s" % (node.ssh_key_file, node.ssh_user, node.hostname)
+    print "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s" % (node.ssh_key_file, node.ssh_user, node.hostname)
 
 @task
 def cleanup(node_name = None):
@@ -71,6 +71,9 @@ def setup_puppet_standalone():
         result = run('puppet --version')
     if result.failed:
         sudo('yum install -y puppet')
+    with settings(warn_only=True):
+        run("rm -f ec2-setup.tgz")
+        run("rm -rf puppet/")
     local("tar czf /tmp/ec2-setup.tgz puppet/*")
     put("/tmp/ec2-setup.tgz", ".")
     run("tar xzf ec2-setup.tgz")
