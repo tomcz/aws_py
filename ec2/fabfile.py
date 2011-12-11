@@ -9,25 +9,17 @@ import aws, time
 @task
 def provision_activemq():
     node = aws.provision_with_boto('activemq')
-    configure_server_cfg(node.hostname)
     with connection_to_node(node):
         setup_puppet_standalone()
-        put('/tmp/server.cfg', '/tmp')
-        put('client.cfg', '/tmp')
-        put('broker.ks', '/tmp')
-        put('activemq.xml', '/tmp')
-        put('activemq.pp', '/tmp')
-        sudo('puppet apply /tmp/activemq.pp')
+        apply_manifest("active-hub", node.hostname)
 
 @task
 def provision_node(node_name):
+    stomp_host = aws.public_dns('activemq')
     node = aws.provision_with_boto(node_name)
-    configure_server_cfg(aws.public_dns('activemq'))
     with connection_to_node(node):
         setup_puppet_standalone()
-        put('/tmp/server.cfg', '/tmp')
-        put('node.pp', '/tmp')
-        sudo('puppet apply /tmp/node.pp')
+        apply_manifest("spoke", stomp_host)
 
 @task
 def mco_ping():
@@ -38,8 +30,8 @@ def mco_ping():
 @task
 def shell(node_name):
     node = aws.provision_with_boto(node_name)
-    with connection_to_node(node):
-        open_shell()
+    wait_for_ssh_connection(node)
+    print "ssh -i %s %s@%s" % (node.ssh_key_file, node.ssh_user, node.hostname)
 
 @task
 def cleanup(node_name = None):
@@ -58,12 +50,6 @@ def destroy():
 # --------------------------------------------------------------------
 # Common provisioning functions
 # --------------------------------------------------------------------
-
-def configure_server_cfg(activemq_host):
-    template = Template(filename='server.cfg.mako')
-    content = template.render(activemq_host=activemq_host)
-    with open('/tmp/server.cfg', 'w') as fp:
-        fp.write(content)
 
 def connection_to_node(node):
     wait_for_ssh_connection(node)
@@ -85,3 +71,11 @@ def setup_puppet_standalone():
         result = run('puppet --version')
     if result.failed:
         sudo('yum install -y puppet')
+    local("tar czf /tmp/ec2-setup.tgz puppet/*")
+    put("/tmp/ec2-setup.tgz", ".")
+    run("tar xzf ec2-setup.tgz")
+
+def apply_manifest(manifest, stomp_host):
+    puppet_root = "/home/ec2-user/puppet"
+    command = "FACTER_stomp_host=${stomp_host} puppet apply --modulepath=${puppet}/modules ${puppet}/manifests/${manifest}.pp"
+    sudo(Template(command).render(stomp_host=stomp_host, manifest=manifest, puppet=puppet_root))

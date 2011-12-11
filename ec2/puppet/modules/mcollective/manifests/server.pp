@@ -10,7 +10,7 @@ class mcollective::server {
 
   file { "/etc/mcollective/server.cfg":
     ensure  => present,
-    content => template("server.cfg.erb"),
+    content => template("mcollective/server.cfg.erb"),
     mode    => 0644,
     group   => "root",
     owner   => "root",
