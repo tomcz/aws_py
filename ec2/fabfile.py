@@ -1,29 +1,27 @@
 # pip install boto
 # pip install fabric
-# pip install mako
 
-from mako.template import Template
 from fabric.api import *
 import aws, time
 
 @task
 def provision_activemq():
-    node = aws.provision_with_boto('activemq')
+    node = aws.provision_with_boto('broker')
     with connection_to_node(node):
         setup_puppet_standalone()
-        apply_manifest("active-hub", node.hostname)
+        apply_manifest("broker-activemq", node.hostname)
 
 @task
 def provision_node(node_name):
-    stomp_host = aws.public_dns('activemq')
+    stomp_host = aws.public_dns('broker')
     node = aws.provision_with_boto(node_name)
     with connection_to_node(node):
         setup_puppet_standalone()
-        apply_manifest("spoke", stomp_host)
+        apply_manifest("mcollective-node", stomp_host)
 
 @task
 def mco_ping():
-    node = aws.provision_with_boto('activemq')
+    node = aws.provision_with_boto('broker')
     with connection_to_node(node):
         run('mco ping')
 
@@ -31,7 +29,8 @@ def mco_ping():
 def shell(node_name):
     node = aws.provision_with_boto(node_name)
     wait_for_ssh_connection(node)
-    print "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s" % (node.ssh_key_file, node.ssh_user, node.hostname)
+    command = "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s"
+    print command % (node.ssh_key_file, node.ssh_user, node.hostname)
 
 @task
 def cleanup(node_name = None):
@@ -80,5 +79,5 @@ def setup_puppet_standalone():
 
 def apply_manifest(manifest, stomp_host):
     puppet_root = "/home/ec2-user/puppet"
-    command = "FACTER_stomp_host=${stomp_host} puppet apply --modulepath=${puppet}/modules ${puppet}/manifests/${manifest}.pp"
-    sudo(Template(command).render(stomp_host=stomp_host, manifest=manifest, puppet=puppet_root))
+    command = "FACTER_stomp_host=%s puppet apply --modulepath=%s/modules %s/manifests/%s.pp"
+    sudo(command % (stomp_host, puppet_root, puppet_root, manifest))
