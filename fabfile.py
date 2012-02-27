@@ -29,8 +29,17 @@ def mco_ping():
 def shell(node_name):
     node = aws.provision_with_boto(node_name)
     wait_for_ssh_connection(node)
-    command = "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s"
-    print command % (node.ssh_key_file, node.ssh_user, node.hostname)
+
+    filename = 'shell_' + node_name
+    command = "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s\n"
+    command = command % (node.ssh_key_file, node.ssh_user, node.hostname)
+
+    with open(filename, 'w') as script:
+        script.write('#!/bin/sh\n')
+        script.write(command)
+
+    os.chmod(filename, 0755)
+    print "Connect to [%s] instance using ./%s" % (node_name, filename)
 
 @task
 def cleanup(node_name = None):

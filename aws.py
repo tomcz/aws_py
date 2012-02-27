@@ -1,9 +1,7 @@
 from boto.ec2 import connect_to_region
 from ConfigParser import SafeConfigParser
-import sys, os, time
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from properties import loadcredentials
+import sys, os, time
 
 USERNAME = 'ec2-user'
 AMI_ID = 'ami-8d1945c8'

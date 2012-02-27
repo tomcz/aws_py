@@ -11,8 +11,8 @@ Requirements
 * These scripts have been written for Python 2.7.2 and may not work with other versions.
 * S3 scripts require [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/).
 * CloudFront scripts require the [Mako](http://www.makotemplates.org/) template library.
-* Scripts in the ec2 directory additionally require both [boto](http://boto.cloudhackers.com/index.html)
-  and [fabric](http://docs.fabfile.org/en/1.2.2/index.html) in order to provision and control
+* EC2 scripts additionally require both [boto](http://boto.cloudhackers.com/index.html)
+  and [fabric](http://docs.fabfile.org/en/1.4.0/index.html) in order to provision and control
   multiple EC2 instances.
 * All scripts look for a file called .s3dropbox in your home directory to provide the
   Amazon AWS authentication keys. This is a file in key=value format and follows the
