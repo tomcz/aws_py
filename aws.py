@@ -40,6 +40,12 @@ def provision_with_boto(name):
     print "Instance", name, instance.id, "is running"
     return Node(instance)
 
+def get_node(name):
+    conn = connect()
+    for reservation in fetch_running_reservations(conn, name):
+        for instance in reservation.instances:
+            return Node(instance)
+
 def connect():
     credentials = loadcredentials()
     access_key = credentials.access_key_id

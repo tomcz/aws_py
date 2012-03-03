@@ -3,6 +3,9 @@ import aws, time, os, shutil
 
 @task
 def provision_activemq():
+    """
+    Setup an activemq connection broker
+    """
     node = aws.provision_with_boto('broker')
     with connection_to_node(node):
         setup_puppet_standalone()
@@ -10,7 +13,10 @@ def provision_activemq():
 
 @task
 def provision_node(node_name):
-    stomp_host = aws.public_dns('broker')
+    """
+    Create node that talks to activemq
+    """
+    stomp_host = aws.get_node('broker').hostname
     node = aws.provision_with_boto(node_name)
     with connection_to_node(node):
         setup_puppet_standalone()
@@ -18,12 +24,18 @@ def provision_node(node_name):
 
 @task
 def mco_ping():
+    """
+    Run mcollective ping on the broker
+    """
     node = aws.provision_with_boto('broker')
     with connection_to_node(node):
         run('mco ping')
 
 @task
 def shell(node_name):
+    """
+    Create and/or connect to a named node
+    """
     node = aws.provision_with_boto(node_name)
     wait_for_ssh_connection(node)
 
@@ -39,11 +51,17 @@ def shell(node_name):
     print "Connect to [%s] instance using ./%s" % (node_name, filename)
 
 @task
-def cleanup(node_name):
+def terminate(node_name):
+    """
+    Terminate a named node
+    """
     aws.terminate_instance(node_name)
 
 @task
 def destroy():
+    """
+    Terminate all nodes
+    """
     aws.terminate_all_instances()
 
 # --------------------------------------------------------------------
