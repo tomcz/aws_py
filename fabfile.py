@@ -1,5 +1,5 @@
 from fabric.api import *
-import aws, time, os
+import aws, time, os, shutil
 
 @task
 def provision_activemq():
@@ -55,6 +55,10 @@ def connection_to_node(node):
     return settings(host_string=node.hostname, user=node.ssh_user, key_filename=node.ssh_key_file)
 
 def wait_for_ssh_connection(node):
+    if not os.path.isfile(node.ssh_key_file):
+        key_file_path = prompt('SSH key file?')
+        shutil.copyfile(os.path.expanduser(key_file_path), node.ssh_key_file)
+        os.chmod(node.ssh_key_file, 0600)
     with settings(warn_only=True):
         result = check_ssh(node)
         while result.failed:
