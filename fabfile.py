@@ -39,7 +39,7 @@ def shell(node_name):
     print "Connect to [%s] instance using ./%s" % (node_name, filename)
 
 @task
-def cleanup(node_name = None):
+def cleanup(node_name):
     aws.terminate_instance(node_name)
 
 @task
