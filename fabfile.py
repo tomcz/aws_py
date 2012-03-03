@@ -14,7 +14,7 @@ def provision_activemq():
 @task
 def provision_node(node_name):
     """
-    Create node that talks to activemq
+    Create named node that talks to activemq
     """
     stomp_host = aws.get_node('broker').hostname
     node = aws.provision_with_boto(node_name)
