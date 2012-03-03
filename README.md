@@ -5,6 +5,21 @@ This project comprises a useful set of python scripts written to help me adminis
 distributions and EC2 instances. This is by no means an exhaustive set of features, rather this is simply a
 compendium of what I have found to be useful in dealing with AWS.
 
+Usage
+-----
+
+    $> ./run
+    Available commands:
+
+        destroy             Terminate all nodes
+        mco_ping            Run mcollective ping on the broker
+        provision_activemq  Setup an activemq connection broker
+        provision_node      Create named node that talks to activemq
+        shell               Create and/or connect to a named node
+        terminate           Terminate a named node
+
+    OR ./run <any local python script>
+
 Requirements
 ------------
 
