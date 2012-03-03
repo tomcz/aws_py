@@ -1,8 +1,5 @@
-# pip install boto
-# pip install fabric
-
 from fabric.api import *
-import aws, time
+import aws, time, os
 
 @task
 def provision_activemq():
@@ -43,13 +40,7 @@ def shell(node_name):
 
 @task
 def cleanup(node_name = None):
-    config = aws.read_config()
-    if node_name:
-        if config.has_section(node_name):
-            aws.terminate_instance(node_name)
-    else:
-        for section in config.sections():
-            aws.terminate_instance(section)
+    aws.terminate_instance(node_name)
 
 @task
 def destroy():
@@ -68,7 +59,7 @@ def wait_for_ssh_connection(node):
         result = check_ssh(node)
         while result.failed:
             print 'Waiting for SSH service ...'
-            time.sleep(10)
+            time.sleep(5)
             result = check_ssh(node)
 
 def check_ssh(node):

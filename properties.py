@@ -1,15 +1,23 @@
 import os, hashlib, hmac, base64
+from ConfigParser import SafeConfigParser
+from fabric.operations import prompt
 
 def loadcredentials():
-    properties = {}
-    with open(os.path.join(os.getenv('HOME'), '.s3dropbox')) as prop_file:
-        for line in prop_file:
-            text = line.strip()
-            if len(text) > 0 and not text.startswith('#'):
-                key, sep, val = text.partition('=')
-                properties[key.strip()] = val.strip()
-    access_key = properties['AMAZON_ACCESS_KEY_ID']
-    secret_key = properties['AMAZON_SECRET_ACCESS_KEY']
+    config = SafeConfigParser()
+    config_file_path = os.path.join(os.path.dirname(__file__), 'venv', 'aws.ini')
+
+    if not os.path.isfile(config_file_path):
+        config.add_section('aws')
+        config.set('aws', 'access_key_id', prompt("AWS access key id?"))
+        config.set('aws', 'secret_access_key', prompt("AWS secret access key?"))
+        with open(config_file_path, 'w') as fp:
+            config.write(fp)
+    else:
+        with open(config_file_path) as fp:
+            config.readfp(fp)
+
+    access_key = config.get('aws', 'access_key_id')
+    secret_key = config.get('aws', 'secret_access_key')
     return Credentials(access_key, secret_key)
 
 class Credentials:

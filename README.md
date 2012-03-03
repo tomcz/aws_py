@@ -14,8 +14,5 @@ Requirements
 * EC2 scripts additionally require both [boto](http://boto.cloudhackers.com/index.html)
   and [fabric](http://docs.fabfile.org/en/1.4.0/index.html) in order to provision and control
   multiple EC2 instances.
-* All scripts look for a file called .s3dropbox in your home directory to provide the
-  Amazon AWS authentication keys. This is a file in key=value format and follows the
-  conventions set up by the [S3DropBox](https://github.com/tomcz/s3dropbox) project.
 
 These scripts are covered by the [MIT License](http://www.opensource.org/licenses/mit-license.php).
