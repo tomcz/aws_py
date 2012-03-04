@@ -32,7 +32,7 @@ def mco_ping():
         run('mco ping')
 
 @task
-def shell(node_name):
+def start(node_name):
     """
     Create and/or connect to a named node
     """
@@ -51,14 +51,14 @@ def shell(node_name):
     print "Connect to [%s] instance using ./%s" % (node_name, filename)
 
 @task
-def terminate(node_name):
+def stop(node_name):
     """
     Terminate a named node
     """
     aws.terminate_instance(node_name)
 
 @task
-def destroy():
+def stop_all():
     """
     Terminate all nodes
     """
