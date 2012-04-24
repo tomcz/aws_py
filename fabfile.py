@@ -91,6 +91,7 @@ def setup_puppet_standalone():
     with settings(warn_only=True):
         result = run('puppet --version')
     if result.failed:
+        sudo('yum -y update')
         sudo('yum install -y puppet')
     with settings(warn_only=True):
         run("rm -f ec2-setup.tgz")
