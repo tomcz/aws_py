@@ -101,5 +101,6 @@ def setup_puppet_standalone():
 
 def apply_manifest(manifest, stomp_host):
     puppet_root = "/home/ec2-user/puppet"
-    command = "FACTER_stomp_host=%s puppet apply --modulepath=%s/modules %s/manifests/%s.pp"
-    sudo(command % (stomp_host, puppet_root, puppet_root, manifest))
+    command = "puppet apply --modulepath=%s/modules %s/manifests/%s.pp"
+    with prefix("export FACTER_stomp_host=%s" % stomp_host):
+        sudo(command % (puppet_root, puppet_root, manifest))
