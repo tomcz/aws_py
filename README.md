@@ -8,7 +8,7 @@ compendium of what I have found to be useful in dealing with AWS.
 Usage
 -----
 
-    $> ./run
+    $> ./go
     Available commands:
 
         destroy             Terminate all nodes
@@ -18,12 +18,12 @@ Usage
         shell               Create and/or connect to a named node
         terminate           Terminate a named node
 
-    OR ./run <any local python script>
+    OR ./go <any local python script>
 
 Requirements
 ------------
 
-You should not need to do anything special except to invoke the `./run` script.
+You should not need to do anything special except to invoke the `./go` script.
 It should do the rest including setting up the required python libraries in a virtualenv environment.
 
 Notes

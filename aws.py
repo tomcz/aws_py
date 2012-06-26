@@ -4,7 +4,7 @@ from properties import loadcredentials
 import sys, os, time
 
 USERNAME = 'ec2-user'
-AMI_ID = 'ami-8d1945c8'
+AMI_ID = 'ami-6b73562e'
 INSTANCE_TYPE = 'm1.small'
 
 EC2_REGION = 'us-west-1'
