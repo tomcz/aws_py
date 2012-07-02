@@ -28,12 +28,7 @@ def provision_with_boto(name):
     instance = res.instances[0]
 
     print "Waiting for", name, instance.id, "to start ..."
-    time.sleep(5)
-    instance.update()
-
-    while instance.state != 'running':
-        time.sleep(5)
-        instance.update()
+    wait_while(instance, 'pending')
 
     conn.create_tags([instance.id], {'Name': name})
 
@@ -62,6 +57,7 @@ def terminate_instance(name):
         for instance in reservation.instances:
             print 'Terminating instance', instance.id
             instance.terminate()
+            wait_while(instance, 'running')
 
 def terminate_all_instances():
     conn = connect()
@@ -69,3 +65,10 @@ def terminate_all_instances():
         for instance in reservation.instances:
             print 'Terminating instance', instance.id
             instance.terminate()
+            wait_while(instance, 'running')
+
+def wait_while(instance, status):
+    instance.update()
+    while instance.state == status:
+        time.sleep(5)
+        instance.update()

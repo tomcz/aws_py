@@ -39,7 +39,7 @@ def start(node_name):
     node = aws.provision_with_boto(node_name)
     wait_for_ssh_connection(node)
 
-    filename = 'shell_' + node_name
+    filename = 'ssh_' + node_name
     command = "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s\n"
     command = command % (node.ssh_key_file, node.ssh_user, node.hostname)
 

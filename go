@@ -25,7 +25,7 @@ fi
 if [ $# == 0 ]; then
   venv/bin/python venv/bin/fab --list
   echo ""
-  echo "OR ./run <any local python script>"
+  echo "OR ./go <any local python script>"
   echo ""
 elif [ -e $1 ]; then
   venv/bin/python $@
