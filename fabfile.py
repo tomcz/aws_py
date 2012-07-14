@@ -2,7 +2,7 @@ from fabric.api import *
 import aws, time, os, shutil
 
 @task
-def provision_activemq():
+def provision_broker():
     """
     Setup an activemq connection broker
     """
@@ -10,9 +10,10 @@ def provision_activemq():
     with connection_to_node(node):
         setup_puppet_standalone()
         apply_manifest("broker-activemq", node.hostname)
+    connect_script('broker', node)
 
 @task
-def provision_node(node_name):
+def provision(node_name):
     """
     Create named node that talks to activemq
     """
@@ -21,6 +22,7 @@ def provision_node(node_name):
     with connection_to_node(node):
         setup_puppet_standalone()
         apply_manifest("mcollective-node", stomp_host)
+    connect_script(node_name, node)
 
 @task
 def mco_ping():
@@ -38,17 +40,7 @@ def start(node_name):
     """
     node = aws.provision_with_boto(node_name)
     wait_for_ssh_connection(node)
-
-    filename = 'ssh_' + node_name
-    command = "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s\n"
-    command = command % (node.ssh_key_file, node.ssh_user, node.hostname)
-
-    with open(filename, 'w') as script:
-        script.write('#!/bin/sh\n')
-        script.write(command)
-
-    os.chmod(filename, 0755)
-    print "Connect to [%s] instance using ./%s" % (node_name, filename)
+    connect_script(node_name, node)
 
 @task
 def stop(node_name):
@@ -105,3 +97,15 @@ def apply_manifest(manifest, stomp_host):
     command = "puppet apply --modulepath=%s/modules %s/manifests/%s.pp"
     with prefix("export FACTER_stomp_host=%s" % stomp_host):
         sudo(command % (puppet_root, puppet_root, manifest))
+
+def connect_script(node_name, node):
+    filename = 'ssh_' + node_name
+    command = "ssh -i %s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no %s@%s\n"
+    command = command % (node.ssh_key_file, node.ssh_user, node.hostname)
+
+    with open(filename, 'w') as script:
+        script.write('#!/bin/sh\n')
+        script.write(command)
+
+    os.chmod(filename, 0755)
+    print "Connect to [%s] instance using ./%s" % (node_name, filename)
