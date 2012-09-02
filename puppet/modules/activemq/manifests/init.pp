@@ -24,21 +24,21 @@ class activemq {
   package { "tanukiwrapper-3.5.9-1.el6.i686":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://watchitlater.com/rpms/tanukiwrapper-3.5.9-1.el6.i686.rpm",
+    source   => "http://archives.watchitlater.com/rpms/tanukiwrapper-3.5.9-1.el6.i686.rpm",
     require  => [Package["java-1.6.0-openjdk-devel"], User["activemq"]],
   }
 
   package { "activemq-5.5.0-1.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://watchitlater.com/rpms/activemq-5.5.0-1.el6.noarch.rpm",
+    source   => "http://archives.watchitlater.com/rpms/activemq-5.5.0-1.el6.noarch.rpm",
     require  => Package["tanukiwrapper-3.5.9-1.el6.i686"],
   }
 
   package { "activemq-info-provider-5.5.0-1.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://watchitlater.com/rpms/activemq-info-provider-5.5.0-1.el6.noarch.rpm",
+    source   => "http://archives.watchitlater.com/rpms/activemq-info-provider-5.5.0-1.el6.noarch.rpm",
     require  => Package["activemq-5.5.0-1.el6"],
   }
 

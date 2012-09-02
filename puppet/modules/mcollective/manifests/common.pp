@@ -16,7 +16,7 @@ class mcollective::common {
   package { "mcollective-common-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://watchitlater.com/rpms/mcollective-common-1.3.1-2.el6.noarch.rpm",
+    source   => "http://archives.watchitlater.com/rpms/mcollective-common-1.3.1-2.el6.noarch.rpm",
     require  => Package["rubygem-stomp"],
   }
 }

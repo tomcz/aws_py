@@ -4,7 +4,7 @@ class mcollective::server {
   package { "mcollective-1.3.1-2.el6":
     ensure   => installed,
     provider => "rpm",
-    source   => "http://watchitlater.com/rpms/mcollective-1.3.1-2.el6.noarch.rpm",
+    source   => "http://archives.watchitlater.com/rpms/mcollective-1.3.1-2.el6.noarch.rpm",
     require  => Package["mcollective-common-1.3.1-2.el6"],
   }
 
