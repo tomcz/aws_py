@@ -8,15 +8,15 @@ compendium of what I have found to be useful in dealing with AWS.
 Usage
 -----
 
-    $> ./go
+    $ ./go
     Available commands:
 
-        destroy             Terminate all nodes
-        mco_ping            Run mcollective ping on the broker
-        provision_activemq  Setup an activemq connection broker
-        provision_node      Create named node that talks to activemq
-        shell               Create and/or connect to a named node
-        terminate           Terminate a named node
+        mco_ping          Run mcollective ping on the broker
+        provision         Create named node that talks to activemq
+        provision_broker  Setup an activemq connection broker
+        start             Create and/or connect to a named node
+        stop              Terminate a named node
+        stop_all          Terminate all nodes
 
     OR ./go <any local python script>
 
