@@ -5,6 +5,10 @@ This project comprises a useful set of python scripts written to help me adminis
 distributions and EC2 instances. This is by no means an exhaustive set of features, rather this is simply a
 compendium of what I have found to be useful in dealing with AWS.
 
+If your preference for AWS EC2 automation is for ruby & chef then check out https://github.com/tomcz/aws_rb as it
+duplicates all the capabilities of fabfile.py and aws.py using rake, net/ssh and Amazon's ruby aws-sdk, whilst
+using chef as a replacement for puppet.
+
 Usage
 -----
 
